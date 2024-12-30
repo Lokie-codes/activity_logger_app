@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:logit_app/calendar_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:logit_app/register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -13,11 +15,17 @@ class _LoginScreenState extends State<LoginScreen> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  void _login() {
-    if(_usernameController.text == 'user' && _passwordController.text == 'password' || true) {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const CalendarScreen()),
+  void _login() async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: _usernameController.text, 
+        password: _passwordController.text,
       );
-    } else {
+      Navigator.push(
+        context, 
+        MaterialPageRoute(builder: (context) => const CalendarScreen()),
+        );
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Invalid username or password')),
       );
@@ -43,6 +51,15 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           const SizedBox(height: 20),
           ElevatedButton(onPressed: _login, child: const Text('Login'),),
+
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context, 
+                MaterialPageRoute(builder: (context) => const RegisterScreen()));
+            }, 
+            child: const Text('Register'),
+          ),
         ],
       ),),
     );

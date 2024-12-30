@@ -1,4 +1,4 @@
-package com.example.logit_app
+package com.fromscratch.trackit
 
 import io.flutter.embedding.android.FlutterActivity
 
